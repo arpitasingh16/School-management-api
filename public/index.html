@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add School</title>
+</head>
+<body>
+    <h1>Add a New School</h1>
+    <form id="addSchoolForm">
+        <label for="name">School Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="address">School Address:</label>
+        <input type="text" id="address" name="address" required><br><br>
+
+        <label for="latitude">Latitude:</label>
+        <input type="text" id="latitude" name="latitude" required><br><br>
+
+        <label for="longitude">Longitude:</label>
+        <input type="text" id="longitude" name="longitude" required><br><br>
+
+        <button type="submit">Add School</button>
+    </form>
+
+    <script>
+        // Handle the form submission
+        document.getElementById('addSchoolForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+
+            // Create the data to send in the POST request
+            const schoolData = {
+                name,
+                address,
+                latitude,
+                longitude
+            };
+
+            // Make the POST request using Fetch API
+            fetch('http://localhost:3000/addSchool', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(schoolData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert('School added successfully!');
+                } else if (data.error) {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding the school');
+            });
+        });
+    </script>
+</body>
+</html>
